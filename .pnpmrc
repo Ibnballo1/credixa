@@ -1,0 +1,9 @@
+# File: .pnpmrc
+# Purpose: Configuration for pnpm package manager in Credixa workspace
+
+# Relax minimum release age check for active development
+minimum-release-age=0
+
+# Increase fetch timeouts to handle network fluctuations
+fetch-retries=5
+fetch-retry-maxtimeout=60000

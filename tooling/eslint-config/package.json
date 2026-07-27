@@ -1,0 +1,13 @@
+{
+  "name": "@credixa/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "base.js",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.63.0",
+    "@typescript-eslint/parser": "^8.63.0",
+    "eslint-config-next": "^16.2.11",
+    "eslint-plugin-drizzle": "^0.2.3"
+  }
+}

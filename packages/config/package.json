@@ -1,0 +1,21 @@
+{
+  "name": "@credixa/config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@credixa/typescript-config": "workspace:*",
+    "@types/node": "^20.19.43",
+    "typescript": "^6.0.3"
+  }
+}

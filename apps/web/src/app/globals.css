@@ -1,0 +1,26 @@
+/**
+ * File: apps/web/src/app/globals.css
+ * Purpose: Tailwind CSS v4 entry point. v4 is CSS-first — brand tokens are
+ *          declared here via @theme (registered as CSS custom properties
+ *          and turned into utilities like bg-primary automatically),
+ *          rather than in a tailwind.config.ts file. Content detection is
+ *          automatic in v4, so no `content` paths are needed either.
+ */
+@import "tailwindcss";
+
+@theme {
+  /* Credixa brand identity */
+  --color-primary: #16a34a; /* deep green */
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #2563eb; /* modern blue */
+  --color-secondary-foreground: #ffffff;
+  --color-accent: #facc15; /* gold */
+  --color-accent-foreground: #1e293b;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
