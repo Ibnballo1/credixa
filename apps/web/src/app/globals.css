@@ -7,6 +7,7 @@
  *          automatic in v4, so no `content` paths are needed either.
  */
 @import "tailwindcss";
+@source "../../../../packages/ui";
 
 @theme {
   /* Credixa brand identity */

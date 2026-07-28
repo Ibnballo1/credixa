@@ -1,3 +1,5 @@
+import { Logo } from "@credixa/ui";
+
 /**
  * File: apps/web/src/app/(auth)/layout.tsx
  * Purpose: Shared shell for sign-up/sign-in pages — centered card layout.
@@ -10,9 +12,9 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="mb-8 flex items-center gap-2">
-        <div className="h-8 w-8 rounded-md bg-primary" />
-        <span className="text-xl font-semibold text-slate-900">Credixa</span>
+      <div className="mb-6 flex flex-col items-center">
+        <Logo size="lg" className="w-12 h-12" />
+        <h1 className="text-lg font-medium">Sign in to your account</h1>
       </div>
       <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
         {children}

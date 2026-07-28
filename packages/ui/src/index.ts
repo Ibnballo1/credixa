@@ -6,3 +6,4 @@ export type { ButtonProps } from "./button";
 export { Input, FieldError, Label } from "./input";
 export type { InputProps } from "./input";
 export { cn } from "./lib/cn";
+export { Logo, type LogoProps } from "./logo";
