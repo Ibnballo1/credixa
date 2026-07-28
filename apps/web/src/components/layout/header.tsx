@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, User, LayoutDashboard } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { Button, Logo } from "@credixa/ui";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
