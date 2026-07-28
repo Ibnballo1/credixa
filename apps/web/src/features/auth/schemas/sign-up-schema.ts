@@ -5,10 +5,7 @@
 //          convenience, never a security boundary).
 
 import { z } from "zod";
-
-// Nigerian mobile numbers: optional +234/234 prefix or leading 0,
-// followed by a valid network prefix and 9 digits.
-const NIGERIAN_PHONE_REGEX = /^(?:\+234|234|0)[789]\d{9}$/;
+import { NIGERIAN_PHONE_REGEX } from "@credixa/lib";
 
 export const signUpSchema = z
   .object({

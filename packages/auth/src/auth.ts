@@ -6,7 +6,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 import { db } from "@credixa/db";
-import { schema } from "@credixa/db/src"; // Import the full schema object
+import * as schema from "@credixa/db/src/schema"; // Import the full schema object
 import { env } from "@credixa/config";
 import { DEFAULT_ROLE } from "@credixa/types";
 
