@@ -1,10 +1,10 @@
 /**
  * File: apps/web/src/features/transactions/components/transaction-history.tsx
- * Purpose: Transaction history shell for the dashboard. Renders a proper
- *          empty state today; once Phase 4/5 wire up real data through
- *          `transaction-service.ts`, this component's list-rendering
- *          branch (already written below) takes over with no further
- *          changes needed here.
+ * Purpose: Transaction history, now backed by real wallet_transaction
+ *          rows as of Phase 4. Amounts are signed (positive = credit,
+ *          negative = debit) — shown here with an explicit "+" prefix and
+ *          green color for credits, since Intl's currency formatter only
+ *          adds a sign for negative numbers by default.
  */
 import { formatKoboAsNaira } from "@credixa/lib";
 import type { TransactionSummary } from "../services/transaction-service";
@@ -29,28 +29,34 @@ export function TransactionHistory({
         </div>
       ) : (
         <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
-          {transactions.map((tx) => (
-            <li
-              key={tx.id}
-              className="flex items-center justify-between px-4 py-3"
-            >
-              <div>
-                <p className="text-sm font-medium text-slate-900">
-                  {tx.description}
-                </p>
-                <p className="text-xs text-slate-400">
-                  {tx.createdAt.toLocaleDateString("en-NG", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </p>
-              </div>
-              <span className="text-sm font-semibold text-slate-900">
-                {formatKoboAsNaira(tx.amountKobo)}
-              </span>
-            </li>
-          ))}
+          {transactions.map((tx) => {
+            const isCredit = tx.amountKobo > 0;
+            return (
+              <li
+                key={tx.id}
+                className="flex items-center justify-between px-4 py-3"
+              >
+                <div>
+                  <p className="text-sm font-medium text-slate-900">
+                    {tx.description}
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    {tx.createdAt.toLocaleDateString("en-NG", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+                <span
+                  className={`text-sm font-semibold ${isCredit ? "text-primary" : "text-slate-900"}`}
+                >
+                  {isCredit ? "+" : ""}
+                  {formatKoboAsNaira(tx.amountKobo)}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

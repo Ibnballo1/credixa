@@ -14,10 +14,8 @@ import { TransactionHistory } from "@/features/transactions/components/transacti
 export default async function DashboardPage() {
   const session = await requireAuth();
 
-  const [wallet, transactions] = await Promise.all([
-    getOrCreateWallet(session.user.id),
-    getRecentTransactions(session.user.id),
-  ]);
+  const wallet = await getOrCreateWallet(session.user.id);
+  const transactions = await getRecentTransactions(wallet.id);
 
   return (
     <div className="space-y-8">

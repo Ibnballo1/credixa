@@ -23,6 +23,20 @@ const serverSchema = z.object({
   DIRECT_URL: z.string().min(1, "DIRECT_URL is required"),
   BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
   BETTER_AUTH_URL: z.string().url("BETTER_AUTH_URL must be a valid URL"),
+  // Paystack — the SAME secret key is used both for API calls
+  // (Authorization: Bearer) and for verifying inbound webhook signatures
+  // (HMAC-SHA512 of the raw request body). Paystack has no separate
+  // "webhook secret" — docs/environment-variables.md's earlier Phase 0
+  // draft assumed one existed; verified otherwise before implementing
+  // Phase 4.
+  PAYSTACK_SECRET_KEY: z.string().min(1),
+
+  // Inngest — optional: local dev uses the Inngest Dev Server (no keys
+  // needed), production requires both. Not enforced as required here
+  // since a missing key should fail loudly from Inngest's own client at
+  // the point of use in production, not block local `pnpm dev` entirely.
+  INNGEST_EVENT_KEY: z.string().optional(),
+  INNGEST_SIGNING_KEY: z.string().optional(),
 });
 
 const clientSchema = z.object({
@@ -78,3 +92,4 @@ function getEnv() {
 }
 
 export const env = getEnv();
+export type Env = ReturnType<typeof getEnv>;

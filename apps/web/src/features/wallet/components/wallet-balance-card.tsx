@@ -5,6 +5,7 @@
  *          loading state; Phase 3 will revisit this once balance can
  *          actually change and optimistic updates matter.
  */
+import Link from "next/link";
 import { Wallet as WalletIcon } from "lucide-react";
 import { formatKoboAsNaira } from "@credixa/lib";
 import type { WalletRecord } from "@credixa/db";
@@ -21,9 +22,12 @@ export function WalletBalanceCard({ wallet }: { wallet: WalletRecord }) {
       <p className="mt-3 text-3xl font-semibold tracking-tight">
         {formatKoboAsNaira(wallet.balance)}
       </p>
-      <p className="mt-2 text-xs text-white/70">
-        Wallet funding is coming soon — you&apos;ll be able to top up here.
-      </p>
+      <Link
+        href="/dashboard/fund"
+        className="mt-3 inline-block rounded-md bg-white/15 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/25"
+      >
+        Fund wallet →
+      </Link>
     </div>
   );
 }

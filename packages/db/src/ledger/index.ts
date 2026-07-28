@@ -19,6 +19,8 @@ export type {
 export { reconcileWalletBalance, reconcileAllWallets } from "./reconciliation";
 export type { WalletReconciliationReport } from "./reconciliation";
 
+export { generateReference } from "./generate-reference";
+
 export {
   InsufficientBalanceError,
   WalletNotFoundError,

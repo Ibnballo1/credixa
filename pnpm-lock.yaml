@@ -8,6 +8,12 @@ importers:
 
   .:
     devDependencies:
+      '@credixa/db':
+        specifier: workspace:*
+        version: link:packages/db
+      tsx:
+        specifier: ^4.23.1
+        version: 4.23.1
       turbo:
         specifier: ^2.10.7
         version: 2.10.7
@@ -108,6 +114,9 @@ importers:
       better-auth:
         specifier: ^1.6.25
         version: 1.6.25(@opentelemetry/api@1.9.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(gel@2.2.0)(kysely@0.29.4)(postgres@3.4.9))(next@16.2.12(@opentelemetry/api@1.9.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      inngest:
+        specifier: ^4.0.0
+        version: 4.13.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(next@16.2.12(@opentelemetry/api@1.9.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(typescript@6.0.3)(zod@4.4.3)
       lucide-react:
         specifier: ^1.27.0
         version: 1.27.0(react@19.2.8)
@@ -226,6 +235,9 @@ importers:
 
   packages/lib:
     dependencies:
+      '@credixa/config':
+        specifier: workspace:*
+        version: link:../config
       '@credixa/db':
         specifier: workspace:*
         version: link:../db

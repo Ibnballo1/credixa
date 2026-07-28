@@ -46,3 +46,17 @@ export const walletHoldStatusEnum = pgEnum("credixa_wallet_hold_status", [
   "finalized",
   "released",
 ]);
+
+// Phase 4: payment provider abstraction. Only "paystack" today, but kept
+// as an enum (not a bare string) so adding a second provider later is a
+// one-line change here rather than a data-migration.
+export const paymentProviderEnum = pgEnum("credixa_payment_provider", [
+  "paystack",
+]);
+
+export const paymentStatusEnum = pgEnum("credixa_payment_status", [
+  "initiated",
+  "success",
+  "failed",
+  "abandoned",
+]);

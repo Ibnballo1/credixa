@@ -40,5 +40,17 @@ export type {
   AuditLogRecord,
   CreateAuditLogInput,
 } from "./repositories/audit-log-repository";
+export { createPaymentRepository } from "./repositories/payment-repository";
+export type {
+  PaymentRepository,
+  PaymentRecord,
+  CreatePaymentInput,
+} from "./repositories/payment-repository";
+export { createPaymentWebhookRepository } from "./repositories/payment-webhook-repository";
+export type {
+  PaymentWebhookRepository,
+  PaymentWebhookRecord,
+  LogWebhookInput,
+} from "./repositories/payment-webhook-repository";
 
 export * from "./ledger";

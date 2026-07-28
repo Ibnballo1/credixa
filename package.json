@@ -14,9 +14,12 @@
     "db:generate": "pnpm --filter @credixa/db drizzle-kit generate",
     "db:push": "pnpm --filter @credixa/db drizzle-kit push",
     "db:studio": "pnpm --filter @credixa/db drizzle-kit studio",
-    "auth:generate": "pnpm --filter @credixa/auth exec better-auth generate"
+    "auth:generate": "pnpm --filter @credixa/auth exec better-auth generate",
+    "ledger:demo": "tsx tooling/scripts/wallet-ledger-demo.ts"
   },
   "devDependencies": {
+    "@credixa/db": "workspace:*",
+    "tsx": "^4.23.1",
     "turbo": "^2.10.7",
     "typescript": "^6.0.3"
   }

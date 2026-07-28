@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@credixa/config": "workspace:*",
     "@credixa/db": "workspace:*",
     "inngest": "^4.0.0"
   },
