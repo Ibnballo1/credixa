@@ -7,12 +7,8 @@
  *          session check via requireAuth() before rendering anything
  *          underneath it.
  */
-import Link from "next/link";
 import { requireAuth } from "@credixa/auth";
-import { signOutAction } from "@/features/auth/actions/sign-out";
 import { getNotificationSummary } from "@/features/notifications/services/notification-service";
-import { NotificationBell } from "@/features/notifications/components/notification-bell";
-import { Button, Logo } from "@credixa/ui";
 import { Header } from "@/components/layout/header";
 
 export default async function CustomerLayout({
