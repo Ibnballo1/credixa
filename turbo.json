@@ -1,5 +1,28 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "PAYSTACK_SECRET_KEY",
+    "PAYSTACK_PUBLIC_KEY",
+    "PAYSTACK_WEBHOOK_SECRET",
+    "RESEND_API_KEY",
+    "RESEND_FROM_EMAIL",
+    "SMS_PROVIDER",
+    "SMS_API_KEY",
+    "CLUBKONNECT_API_URL",
+    "CLUBKONNECT_USER_ID",
+    "CLUBKONNECT_API_KEY",
+    "SMEPLUG_API_URL",
+    "SMEPLUG_API_KEY",
+    "INNGEST_EVENT_KEY",
+    "INNGEST_SIGNING_KEY",
+    "UPSTASH_REDIS_REST_URL",
+    "UPSTASH_REDIS_REST_TOKEN",
+    "NODE_ENV"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

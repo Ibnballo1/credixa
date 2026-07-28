@@ -209,8 +209,8 @@ export async function creditWallet(
     type: input.type,
     idempotencyKey: input.idempotencyKey,
     operation: `wallet.credit.${input.type}`,
-    description: input.description,
-    metadata: input.metadata,
+    description: input.description ?? `Credit of ${input.amountKobo} kobo`,
+    metadata: input.metadata ?? { amount: input.amountKobo },
     actorUserId: input.actorUserId,
   });
 }
@@ -248,8 +248,8 @@ export async function debitWallet(
     type: input.type,
     idempotencyKey: input.idempotencyKey,
     operation: `wallet.debit.${input.type}`,
-    description: input.description,
-    metadata: input.metadata,
+    description: input.description ?? `Debit of ${input.amountKobo} kobo`,
+    metadata: input.metadata ?? { amount: input.amountKobo },
     actorUserId: input.actorUserId,
   });
 }
