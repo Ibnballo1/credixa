@@ -2,11 +2,7 @@
 
 /**
  * File: apps/web/src/features/notifications/components/notification-bell.tsx
- * Purpose: Header notification bell with a dropdown. Data is fetched
- *          server-side (see dashboard layout) and passed in as a prop —
- *          this component owns only the open/closed UI interaction, not
- *          the data fetch, keeping the "no DB access in components" rule
- *          intact even for a Client Component.
+ * Purpose: Header notification bell with a dropdown responsive across mobile & desktop.
  */
 import { useState, useRef, useEffect } from "react";
 import { Bell } from "lucide-react";
@@ -39,7 +35,7 @@ export function NotificationBell({
         type="button"
         aria-label="Notifications"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400"
       >
         <Bell className="h-5 w-5" />
         {summary.unreadCount > 0 ? (
@@ -50,13 +46,21 @@ export function NotificationBell({
       </button>
 
       {isOpen ? (
-        <div className="absolute right-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
-          <p className="px-2 py-1.5 text-sm font-medium text-slate-700">
-            Notifications
-          </p>
+        <div className="fixed left-4 right-4 top-16 z-50 mt-2 max-h-[80vh] overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:w-80 sm:max-h-[28rem]">
+          <div className="flex items-center justify-between border-b border-slate-100 px-2 pb-2 pt-1.5">
+            <p className="text-sm font-semibold text-slate-900">
+              Notifications
+            </p>
+            {summary.unreadCount > 0 ? (
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                {summary.unreadCount} new
+              </span>
+            ) : null}
+          </div>
+
           {summary.recent.length === 0 ? (
-            <div className="px-2 py-6 text-center">
-              <p className="text-sm text-slate-500">
+            <div className="px-2 py-8 text-center">
+              <p className="text-sm font-medium text-slate-600">
                 You&apos;re all caught up
               </p>
               <p className="mt-1 text-xs text-slate-400">
@@ -66,11 +70,16 @@ export function NotificationBell({
           ) : (
             <ul className="divide-y divide-slate-100">
               {summary.recent.map((n) => (
-                <li key={n.id} className="px-2 py-2.5">
+                <li
+                  key={n.id}
+                  className="px-2 py-3 hover:bg-slate-50/80 transition-colors"
+                >
                   <p className="text-sm font-medium text-slate-900">
                     {n.title}
                   </p>
-                  <p className="text-xs text-slate-500">{n.body}</p>
+                  <p className="mt-0.5 text-xs text-slate-500 leading-relaxed">
+                    {n.body}
+                  </p>
                 </li>
               ))}
             </ul>
