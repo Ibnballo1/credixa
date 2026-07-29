@@ -89,7 +89,11 @@ export function DataPurchaseForm({ plans }: { plans: ServiceRecord[] }) {
             </option>
           ))}
         </select>
-        <FieldError message={errors.serviceId?.message} />
+        <FieldError
+          {...(errors.serviceId?.message
+            ? { message: errors.serviceId.message }
+            : {})}
+        />
       </div>
 
       <div>
@@ -101,7 +105,11 @@ export function DataPurchaseForm({ plans }: { plans: ServiceRecord[] }) {
           hasError={!!errors.recipientPhone}
           {...register("recipientPhone")}
         />
-        <FieldError message={errors.recipientPhone?.message} />
+        <FieldError
+          {...(errors.recipientPhone?.message
+            ? { message: errors.recipientPhone.message }
+            : {})}
+        />
       </div>
 
       <Button

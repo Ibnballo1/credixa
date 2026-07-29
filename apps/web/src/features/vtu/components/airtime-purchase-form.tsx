@@ -12,6 +12,7 @@
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { z } from "zod";
 import { Button, Input, Label, FieldError } from "@credixa/ui";
 import type { ServiceRecord } from "@credixa/db";
 import {
@@ -38,7 +39,11 @@ export function AirtimePurchaseForm({
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<AirtimePurchaseInput>({
+  } = useForm<
+    z.input<typeof airtimePurchaseSchema>,
+    any,
+    z.output<typeof airtimePurchaseSchema>
+  >({
     resolver: zodResolver(airtimePurchaseSchema),
   });
 
@@ -94,7 +99,9 @@ export function AirtimePurchaseForm({
             </option>
           ))}
         </select>
-        <FieldError message={errors.serviceId?.message} />
+        {errors.serviceId?.message ? (
+          <FieldError message={errors.serviceId.message} />
+        ) : null}
       </div>
 
       <div>
@@ -106,7 +113,9 @@ export function AirtimePurchaseForm({
           hasError={!!errors.recipientPhone}
           {...register("recipientPhone")}
         />
-        <FieldError message={errors.recipientPhone?.message} />
+        {errors.recipientPhone?.message ? (
+          <FieldError message={errors.recipientPhone.message} />
+        ) : null}
       </div>
 
       <div>
@@ -116,9 +125,11 @@ export function AirtimePurchaseForm({
           type="number"
           inputMode="numeric"
           hasError={!!errors.amountNaira}
-          {...register("amountNaira")}
+          {...register("amountNaira", { valueAsNumber: true })}
         />
-        <FieldError message={errors.amountNaira?.message} />
+        {errors.amountNaira?.message ? (
+          <FieldError message={errors.amountNaira.message} />
+        ) : null}
         <div className="mt-2 flex flex-wrap gap-2">
           {QUICK_AMOUNTS.map((amount) => (
             <button
