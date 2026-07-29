@@ -1,11 +1,14 @@
 /**
  * File: apps/web/src/features/wallet/components/quick-actions.tsx
- * Purpose: The dashboard's quick-action grid. "Fund wallet" went live in
- *          Phase 4 — it's a real link now, not a disabled placeholder.
- *          The VTU actions (airtime, data, electricity, cable) stay
- *          disabled with a "Soon" badge until Phase 5. Rendering them as
- *          inert-but-visible (rather than omitting them) sets the right
- *          expectation: the feature exists and is coming, not broken.
+ * Purpose: The dashboard's quick-action grid. "Fund wallet" (Phase 4),
+ *          "Buy airtime," and "Buy data" (Phase 5) are live. Electricity
+ *          and cable stay disabled with a "Soon" badge — both VTU
+ *          providers' field names for those two service types are
+ *          unverified (see
+ *          docs/decisions/0009-vtu-provider-api-verification-status.md),
+ *          so there is deliberately no working purchase flow behind them
+ *          yet, and the linked pages say so explicitly rather than
+ *          showing a form that would always fail.
  */
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
@@ -20,8 +23,8 @@ interface QuickAction {
 
 const QUICK_ACTIONS: QuickAction[] = [
   { label: "Fund wallet", icon: Wallet, href: "/dashboard/fund" },
-  { label: "Buy airtime", icon: Smartphone },
-  { label: "Buy data", icon: Wifi },
+  { label: "Buy airtime", icon: Smartphone, href: "/dashboard/airtime" },
+  { label: "Buy data", icon: Wifi, href: "/dashboard/data" },
   { label: "Pay electricity", icon: Zap },
   { label: "Cable TV", icon: Tv },
 ];
