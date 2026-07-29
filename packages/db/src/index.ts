@@ -52,5 +52,27 @@ export type {
   PaymentWebhookRecord,
   LogWebhookInput,
 } from "./repositories/payment-webhook-repository";
+export { createProviderRepository } from "./repositories/provider-repository";
+export type {
+  ProviderRepository,
+  ProviderRecord,
+} from "./repositories/provider-repository";
+export { createServiceRepository } from "./repositories/service-repository";
+export type {
+  ServiceRepository,
+  ServiceRecord,
+} from "./repositories/service-repository";
+export { createVtuPurchaseRepository } from "./repositories/vtu-purchase-repository";
+export type {
+  VtuPurchaseRepository,
+  VtuPurchaseRecord,
+  CreateVtuPurchaseInput,
+} from "./repositories/vtu-purchase-repository";
+export { createProviderTransactionRepository } from "./repositories/provider-transaction-repository";
+export type {
+  ProviderTransactionRepository,
+  ProviderTransactionRecord,
+  LogProviderTransactionInput,
+} from "./repositories/provider-transaction-repository";
 
 export * from "./ledger";

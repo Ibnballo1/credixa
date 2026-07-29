@@ -15,7 +15,8 @@
     "db:push": "pnpm --filter @credixa/db drizzle-kit push",
     "db:studio": "pnpm --filter @credixa/db drizzle-kit studio",
     "auth:generate": "pnpm --filter @credixa/auth exec better-auth generate",
-    "ledger:demo": "tsx tooling/scripts/wallet-ledger-demo.ts"
+    "ledger:demo": "tsx tooling/scripts/wallet-ledger-demo.ts",
+    "vtu:seed": "tsx tooling/scripts/seed-vtu-catalog.ts"
   },
   "devDependencies": {
     "@credixa/db": "workspace:*",

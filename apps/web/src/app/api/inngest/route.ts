@@ -12,9 +12,10 @@ import {
   inngest,
   walletReconciliation,
   pendingPaymentSweep,
+  pendingVtuSweep,
 } from "@credixa/lib/jobs";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [walletReconciliation, pendingPaymentSweep],
+  functions: [walletReconciliation, pendingPaymentSweep, pendingVtuSweep],
 });

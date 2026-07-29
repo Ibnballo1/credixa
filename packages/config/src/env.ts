@@ -31,6 +31,13 @@ const serverSchema = z.object({
   // Phase 4.
   PAYSTACK_SECRET_KEY: z.string().min(1),
 
+  // VTU providers (Phase 5). Both required — ProviderRouter needs at
+  // least one active provider per service type, and having both
+  // configured is what makes failover meaningful.
+  CLUBKONNECT_USER_ID: z.string().min(1),
+  CLUBKONNECT_API_KEY: z.string().min(1),
+  SMEPLUG_API_KEY: z.string().min(1),
+
   // Inngest — optional: local dev uses the Inngest Dev Server (no keys
   // needed), production requires both. Not enforced as required here
   // since a missing key should fail loudly from Inngest's own client at

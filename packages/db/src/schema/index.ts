@@ -9,3 +9,4 @@ export * from "./wallet";
 export * from "./notification";
 export * from "./ledger";
 export * from "./payment";
+export * from "./vtu";

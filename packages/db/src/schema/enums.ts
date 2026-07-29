@@ -60,3 +60,17 @@ export const paymentStatusEnum = pgEnum("credixa_payment_status", [
   "failed",
   "abandoned",
 ]);
+
+// Phase 5: VTU services
+export const vtuServiceTypeEnum = pgEnum("credixa_vtu_service_type", [
+  "airtime",
+  "data",
+  "electricity",
+  "cable",
+]);
+
+export const vtuPurchaseStatusEnum = pgEnum("credixa_vtu_purchase_status", [
+  "pending",
+  "success",
+  "failed",
+]);
