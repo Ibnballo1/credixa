@@ -131,7 +131,7 @@ export const auditLog = pgTable(
     }),
     action: text("action").notNull(),
     entityType: text("entity_type").notNull(),
-    entityId: uuid("entity_id").notNull(),
+    entityId: text("entity_id").notNull(),
     metadata: jsonb("metadata"),
 
     createdAt: timestamp("created_at", { withTimezone: true })

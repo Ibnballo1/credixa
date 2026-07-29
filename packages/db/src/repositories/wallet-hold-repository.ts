@@ -41,6 +41,21 @@ export function createWalletHoldRepository(db: Database) {
       return Number(row?.total ?? 0);
     },
 
+    /** The actual pending hold rows for a wallet — used by the admin
+     * wallet detail view (Phase 6b) alongside sumPendingByWallet's
+     * aggregate. */
+    async listPendingByWallet(walletId: string): Promise<WalletHoldRecord[]> {
+      return db
+        .select()
+        .from(walletHold)
+        .where(
+          and(
+            eq(walletHold.walletId, walletId),
+            eq(walletHold.status, "pending"),
+          ),
+        );
+    },
+
     /**
      * Atomically transitions a hold from pending → finalized, only if it
      * is still pending. Returns null (not an error) if the hold was

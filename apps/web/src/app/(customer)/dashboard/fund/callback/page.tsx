@@ -34,10 +34,24 @@ export default async function FundingCallbackPage({
   // If this payment was already resolved (by a webhook that beat us
   // here, or a prior visit to this page), don't call Paystack again —
   // just report what's already on file.
-  const status: VerifyAndCreditStatus =
-    paymentRow.status === "initiated"
-      ? (await verifyAndCreditPayment(reference)).status
-      : (paymentRow.status as VerifyAndCreditStatus);
+  let status: VerifyAndCreditStatus;
+  if (paymentRow.status === "initiated") {
+    try {
+      status = (await verifyAndCreditPayment(reference)).status;
+    } catch {
+      return (
+        <CallbackState
+          icon="error"
+          title="Something went wrong"
+          description="We couldn't confirm this payment right now. Please try again shortly."
+          reference={paymentRow.reference}
+          showRecheckLink
+        />
+      );
+    }
+  } else {
+    status = paymentRow.status as VerifyAndCreditStatus;
+  }
 
   if (status === "success" || status === "already_processed") {
     return (

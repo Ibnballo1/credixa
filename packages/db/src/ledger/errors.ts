@@ -24,6 +24,25 @@ export class WalletNotFoundError extends Error {
   }
 }
 
+/**
+ * Thrown when a credit, debit, or hold is attempted against a
+ * non-"active" wallet (e.g. "frozen" by an admin — see Phase 6b). Only
+ * enforced at entry points that START a new financial effect
+ * (creditWallet, debitWallet, createHold) — deliberately NOT enforced in
+ * finalizeHold/releaseHold, since those complete something already in
+ * flight rather than starting something new. Blocking finalization would
+ * leave a hold stuck with no clean resolution if a wallet gets frozen
+ * mid-purchase.
+ */
+export class WalletFrozenError extends Error {
+  constructor(public readonly walletId: string) {
+    super(
+      `Wallet ${walletId} is frozen and cannot be credited, debited, or hold funds`,
+    );
+    this.name = "WalletFrozenError";
+  }
+}
+
 export class WalletHoldNotFoundError extends Error {
   constructor(public readonly holdId: string) {
     super(`Wallet hold ${holdId} not found`);

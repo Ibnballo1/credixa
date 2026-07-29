@@ -21,7 +21,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@credixa/ui", "@credixa/auth", "@credixa/db"],
+  transpilePackages: [
+    "@credixa/ui",
+    "@credixa/auth",
+    "@credixa/db",
+    "@credixa/lib",
+  ],
   async headers() {
     return [
       {
