@@ -24,6 +24,7 @@ import { generateReference } from "./generate-reference";
 import {
   InsufficientBalanceError,
   WalletNotFoundError,
+  WalletFrozenError,
   IdempotencyIntegrityError,
 } from "./errors";
 
@@ -128,6 +129,10 @@ async function applyLedgerEntry(
 
     if (!walletRow) {
       throw new WalletNotFoundError(input.walletId);
+    }
+
+    if (walletRow.status !== "active") {
+      throw new WalletFrozenError(input.walletId);
     }
 
     const balanceBefore = walletRow.balance;

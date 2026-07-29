@@ -10,9 +10,15 @@
  *          admin request re-checks the role rather than trusting the
  *          sign-in-time check alone.
  */
+import Link from "next/link";
 import { requireRole } from "@credixa/auth";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import { Button } from "@credixa/ui";
+
+const NAV_LINKS = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Users", href: "/dashboard/users" },
+];
 
 export default async function DashboardLayout({
   children,
@@ -31,14 +37,23 @@ export default async function DashboardLayout({
               Credixa Admin
             </span>
           </div>
-          <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-slate-600 hover:text-slate-900"
+              >
+                {link.label}
+              </Link>
+            ))}
             <span className="text-sm text-slate-600">{session.user.name}</span>
             <form action={signOutAction}>
               <Button type="submit" variant="ghost" size="sm">
                 Sign out
               </Button>
             </form>
-          </div>
+          </nav>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>

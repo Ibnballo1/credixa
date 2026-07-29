@@ -25,5 +25,6 @@ export {
   InsufficientBalanceError,
   WalletNotFoundError,
   WalletHoldNotFoundError,
+  WalletFrozenError,
   IdempotencyIntegrityError,
 } from "./errors";

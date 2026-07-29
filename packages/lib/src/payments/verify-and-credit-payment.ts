@@ -18,7 +18,12 @@
 //               conditional on the row still being "initiated" — a
 //               second caller's update is a safe no-op, not an error.
 
-import { db, createPaymentRepository, creditWallet } from "@credixa/db";
+import {
+  db,
+  createPaymentRepository,
+  creditWallet,
+  WalletFrozenError,
+} from "@credixa/db";
 import { verifyTransaction } from "./paystack-client";
 
 export type VerifyAndCreditStatus =
@@ -94,7 +99,26 @@ export async function verifyAndCreditPayment(
     description: "Wallet funding via Paystack",
     metadata: { paymentId: paymentRow.id, paystackReference: reference },
     actorUserId: paymentRow.userId,
+  }).catch((err) => {
+    if (err instanceof WalletFrozenError) {
+      // Paystack DID capture real money here — marking this payment
+      // "failed" would be actively misleading (it implies no money
+      // changed hands, prompting the customer to retry and pay twice).
+      // Leave the payment "initiated" instead: once an admin unfreezes
+      // the wallet, the next callback visit / webhook retry / sweep run
+      // will successfully credit it. Reusing "pending" for the return
+      // status here is a deliberate stretch of its usual meaning
+      // ("provider hasn't settled yet") to cover "resolved on our side,
+      // blocked by wallet state" — both cases share the same correct
+      // caller behavior: don't tell the user it failed, try again later.
+      return null;
+    }
+    throw err;
   });
+
+  if (!creditResult) {
+    return { status: "pending", paymentId: paymentRow.id };
+  }
 
   const updated = await paymentRepository.markSuccess(paymentRow.id, {
     walletTransactionId: creditResult.transaction.id,

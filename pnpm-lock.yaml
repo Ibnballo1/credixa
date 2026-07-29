@@ -32,6 +32,9 @@ importers:
       '@credixa/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@credixa/lib':
+        specifier: workspace:*
+        version: link:../../packages/lib
       '@credixa/types':
         specifier: workspace:*
         version: link:../../packages/types

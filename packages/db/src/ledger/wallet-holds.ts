@@ -27,6 +27,7 @@ import {
   InsufficientBalanceError,
   WalletNotFoundError,
   WalletHoldNotFoundError,
+  WalletFrozenError,
   IdempotencyIntegrityError,
 } from "./errors";
 
@@ -101,6 +102,9 @@ export async function createHold(
       .limit(1);
     if (!walletRow) {
       throw new WalletNotFoundError(input.walletId);
+    }
+    if (walletRow.status !== "active") {
+      throw new WalletFrozenError(input.walletId);
     }
 
     const [pendingSumRow] = await tx

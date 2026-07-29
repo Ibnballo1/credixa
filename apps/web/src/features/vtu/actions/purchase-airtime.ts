@@ -12,6 +12,7 @@ import {
   db,
   createWalletRepository,
   InsufficientBalanceError,
+  WalletFrozenError,
 } from "@credixa/db";
 import { initiatePurchase } from "@credixa/lib/jobs";
 import {
@@ -63,6 +64,12 @@ export async function purchaseAirtimeAction(
         success: false,
         error:
           "Insufficient wallet balance. Please fund your wallet and try again.",
+      };
+    }
+    if (err instanceof WalletFrozenError) {
+      return {
+        success: false,
+        error: "Your wallet is currently frozen. Please contact support.",
       };
     }
     return { success: false, error: "Something went wrong. Please try again." };
