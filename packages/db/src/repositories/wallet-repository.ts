@@ -10,7 +10,7 @@
 //          isn't a balance mutation, and the ledger itself enforces the
 //          resulting status (see docs/decisions/0011-wallet-status-enforcement-fix.md).
 
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import type { Database } from "../client";
 import { wallet, user } from "../schema";
 
