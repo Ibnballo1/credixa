@@ -4,6 +4,7 @@
 export { inngest } from "./inngest-client";
 export { walletReconciliation } from "./wallet-reconciliation";
 export { pendingPaymentSweep } from "./pending-payment-sweep";
+export { pendingVtuSweep } from "./pending-vtu-sweep";
 
 export {
   initializeTransaction,
@@ -13,3 +14,13 @@ export {
 
 export { verifyPaystackWebhookSignature } from "../payments/verify-webhook-signature";
 export { verifyAndCreditPayment } from "../payments/verify-and-credit-payment";
+
+// VTU Services & Provider Routing
+export {
+  routePurchase,
+  checkPurchaseStatus,
+} from "../providers/provider-router";
+export {
+  initiatePurchase,
+  resolvePendingPurchase,
+} from "../vtu/purchase-service";
