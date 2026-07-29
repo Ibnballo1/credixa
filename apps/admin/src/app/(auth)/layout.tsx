@@ -13,7 +13,7 @@ export default function AuthLayout({
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2">
         <Logo size="sm" className="w-12 h-12" />
-        <h1 className="text-lg font-medium">Sign in to your account</h1>
+        {/* <h1 className="text-lg font-medium">Sign in to your account</h1> */}
       </div>
       <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
         {children}
