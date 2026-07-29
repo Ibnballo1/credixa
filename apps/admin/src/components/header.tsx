@@ -37,9 +37,9 @@ export function Header({ session }: HeaderProps) {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
         {/* Logo & Brand */}
-        <div className="flex shrink-0 items-center gap-3">
-          <Logo size="lg" className="h-10 w-10" />
-          <span className="text-base hidden md:block font-semibold text-slate-900 sm:text-lg">
+        <div className="flex shrink-0 items-center gap-2">
+          <Logo size="lg" className="h-10 w-10" iconOnly={true} />
+          <span className="text-base font-semibold text-slate-900 sm:text-lg">
             Credixa Admin
           </span>
         </div>
