@@ -45,7 +45,7 @@ export function Logo({
     >
       <img src={imageSrc} alt={alt} className={cn("w-12 h-12", heightClass)} />
       {!iconOnly && (
-        <span className="text-xl hidden md:block font-bold tracking-tight text-slate-900">
+        <span className="text-xl hidden font-bold tracking-tight text-slate-900">
           Credixa<span className="text-primary">.</span>
         </span>
       )}
