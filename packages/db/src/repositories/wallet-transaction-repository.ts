@@ -5,7 +5,7 @@
 //          packages/db/src/ledger/wallet-ledger.ts, always inside a
 //          db.transaction() alongside a wallet.balance update.
 
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import type { Database } from "../client";
 import { walletTransaction, wallet, user } from "../schema";
 
