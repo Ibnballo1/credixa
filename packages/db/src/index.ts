@@ -23,6 +23,7 @@ export { createWalletTransactionRepository } from "./repositories/wallet-transac
 export type {
   WalletTransactionRepository,
   WalletTransactionRecord,
+  WalletTransactionWithUser,
 } from "./repositories/wallet-transaction-repository";
 export { createWalletHoldRepository } from "./repositories/wallet-hold-repository";
 export type {
@@ -45,6 +46,7 @@ export type {
   PaymentRepository,
   PaymentRecord,
   CreatePaymentInput,
+  PaymentWithUser,
 } from "./repositories/payment-repository";
 export { createPaymentWebhookRepository } from "./repositories/payment-webhook-repository";
 export type {
@@ -67,6 +69,7 @@ export type {
   VtuPurchaseRepository,
   VtuPurchaseRecord,
   CreateVtuPurchaseInput,
+  VtuPurchaseWithDetails,
 } from "./repositories/vtu-purchase-repository";
 export { createProviderTransactionRepository } from "./repositories/provider-transaction-repository";
 export type {
@@ -74,5 +77,12 @@ export type {
   ProviderTransactionRecord,
   LogProviderTransactionInput,
 } from "./repositories/provider-transaction-repository";
+// export { createPricingRuleRepository } from "./repositories/pricing-rule-repository";
+// export type {
+//   PricingRuleRepository,
+//   PricingRuleRecord,
+//   CreatePricingRuleInput,
+// } from "./repositories/pricing-rule-repository";
 
+// export * from "./pricing";
 export * from "./ledger";

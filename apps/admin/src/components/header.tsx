@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useTransition } from "react";
-import { LogOut, Users, LayoutDashboard } from "lucide-react";
+import {
+  LogOut,
+  Users,
+  LayoutDashboard,
+  Wallet,
+  ArrowLeftRight,
+  ShoppingBag,
+  CreditCard,
+} from "lucide-react";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import type { Session } from "@credixa/auth";
 import {
@@ -15,6 +23,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@credixa/ui";
+
+const NAV_LINKS = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Users", href: "/dashboard/users", icon: Users },
+  { label: "Wallets", href: "/dashboard/wallets", icon: Wallet },
+  {
+    label: "Transactions",
+    href: "/dashboard/transactions",
+    icon: ArrowLeftRight,
+  },
+  { label: "Purchases", href: "/dashboard/purchases", icon: ShoppingBag },
+  { label: "Payments", href: "/dashboard/payments", icon: CreditCard },
+];
 
 interface HeaderProps {
   session: Session;
@@ -44,27 +65,26 @@ export function Header({ session }: HeaderProps) {
           </span>
         </div>
 
-        {/* Navigation & Avatar Menu */}
-        <nav className="flex items-center gap-4 md:gap-6">
-          <Link
-            href="/dashboard"
-            className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-300"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/dashboard/users"
-            className="text-sm hidden md:block font-medium text-slate-600 transition-colors hover:text-slate-300"
-          >
-            Users
-          </Link>
+        {/* Desktop Links Container */}
+        <div className="flex items-center gap-4 md:gap-6">
+          <nav className="hidden items-center gap-1 sm:flex sm:gap-2 md:gap-4 overflow-x-auto no-scrollbar max-w-[400px] lg:max-w-none">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="whitespace-nowrap px-2 py-1 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Profile Dropdown Trigger */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="relative h-9 w-9 rounded-full bg-slate-200 p-0 focus-visible:ring-2 focus-visible:ring-primary"
+                className="relative h-9 w-9 rounded-full bg-slate-200 p-0 focus-visible:ring-2 focus-visible:ring-primary shrink-0"
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-700">
                   {userInitials}
@@ -75,7 +95,7 @@ export function Header({ session }: HeaderProps) {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none text-slate-300">
+                  <p className="text-sm font-medium leading-none text-slate-900">
                     {session.user.name}
                   </p>
                   <p className="text-xs leading-none text-slate-500">
@@ -83,20 +103,21 @@ export function Header({ session }: HeaderProps) {
                   </p>
                 </div>
               </DropdownMenuLabel>
+
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard" className="cursor-pointer">
-                  <LayoutDashboard className="mr-2 h-4 w-4" />
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/users" className="cursor-pointer">
-                  <Users className="mr-2 h-4 w-4" />
-                  Users
-                </Link>
-              </DropdownMenuItem>
+              {/* All links available in dropdown for mobile and fast navigation */}
+              {NAV_LINKS.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <Link href={link.href} className="cursor-pointer">
+                      <Icon className="mr-2 h-4 w-4" />
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
 
               <DropdownMenuSeparator />
 
@@ -110,7 +131,7 @@ export function Header({ session }: HeaderProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </nav>
+        </div>
       </div>
     </header>
   );

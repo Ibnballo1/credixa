@@ -3,11 +3,17 @@
 //          transitions and the walletTransactionId link are only ever
 //          written by packages/lib/src/vtu/purchase-service.ts.
 
-import { and, eq, lt, sql } from "drizzle-orm";
+import { and, eq, lt, sql, desc } from "drizzle-orm";
 import type { Database } from "../client";
-import { vtuPurchase } from "../schema";
+import { vtuPurchase, user, service } from "../schema";
 
 export type VtuPurchaseRecord = typeof vtuPurchase.$inferSelect;
+
+export interface VtuPurchaseWithDetails extends VtuPurchaseRecord {
+  userName: string;
+  userEmail: string;
+  serviceName: string;
+}
 
 export interface CreateVtuPurchaseInput {
   userId: string;
@@ -132,6 +138,59 @@ export function createVtuPurchaseRepository(db: Database) {
         .where(and(eq(vtuPurchase.id, id), eq(vtuPurchase.status, "pending")))
         .returning();
       return row ?? null;
+    },
+
+    /** Platform-wide purchase feed for Phase 6b's admin monitoring view. */
+    async listAllWithDetails(params: {
+      status?: VtuPurchaseRecord["status"];
+      limit?: number;
+      offset?: number;
+    }): Promise<{ purchases: VtuPurchaseWithDetails[]; total: number }> {
+      const limit = params.limit ?? 50;
+      const offset = params.offset ?? 0;
+      const statusCondition = params.status
+        ? eq(vtuPurchase.status, params.status)
+        : undefined;
+
+      const rows = await db
+        .select({
+          id: vtuPurchase.id,
+          userId: vtuPurchase.userId,
+          walletId: vtuPurchase.walletId,
+          serviceId: vtuPurchase.serviceId,
+          providerId: vtuPurchase.providerId,
+          status: vtuPurchase.status,
+          recipientPhone: vtuPurchase.recipientPhone,
+          recipientMeterNumber: vtuPurchase.recipientMeterNumber,
+          recipientSmartCardNumber: vtuPurchase.recipientSmartCardNumber,
+          amountKobo: vtuPurchase.amountKobo,
+          reference: vtuPurchase.reference,
+          providerReference: vtuPurchase.providerReference,
+          walletHoldId: vtuPurchase.walletHoldId,
+          walletTransactionId: vtuPurchase.walletTransactionId,
+          attemptCount: vtuPurchase.attemptCount,
+          lastError: vtuPurchase.lastError,
+          metadata: vtuPurchase.metadata,
+          createdAt: vtuPurchase.createdAt,
+          updatedAt: vtuPurchase.updatedAt,
+          userName: user.name,
+          userEmail: user.email,
+          serviceName: service.name,
+        })
+        .from(vtuPurchase)
+        .innerJoin(user, eq(vtuPurchase.userId, user.id))
+        .innerJoin(service, eq(vtuPurchase.serviceId, service.id))
+        .where(statusCondition)
+        .orderBy(desc(vtuPurchase.createdAt))
+        .limit(limit)
+        .offset(offset);
+
+      const [countRow] = await db
+        .select({ count: sql<string>`count(*)` })
+        .from(vtuPurchase)
+        .where(statusCondition);
+
+      return { purchases: rows, total: Number(countRow?.count ?? 0) };
     },
   };
 }

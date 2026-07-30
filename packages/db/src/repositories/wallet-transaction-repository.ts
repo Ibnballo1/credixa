@@ -5,11 +5,16 @@
 //          packages/db/src/ledger/wallet-ledger.ts, always inside a
 //          db.transaction() alongside a wallet.balance update.
 
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import type { Database } from "../client";
-import { walletTransaction } from "../schema";
+import { walletTransaction, wallet, user } from "../schema";
 
 export type WalletTransactionRecord = typeof walletTransaction.$inferSelect;
+
+export interface WalletTransactionWithUser extends WalletTransactionRecord {
+  userName: string;
+  userEmail: string;
+}
 
 export function createWalletTransactionRepository(db: Database) {
   return {
@@ -48,6 +53,55 @@ export function createWalletTransactionRepository(db: Database) {
         .from(walletTransaction)
         .where(eq(walletTransaction.walletId, walletId));
       return Number(row?.total ?? 0);
+    },
+
+    /**
+     * Platform-wide transaction feed for Phase 6b's admin monitoring
+     * view — joins through `wallet` to `user` (read-only join, same
+     * caveat as wallet-repository.ts's listWithUser: writing to `user`
+     * must still only go through Better Auth's API).
+     */
+    async listAllWithUser(params: {
+      type?: WalletTransactionRecord["type"];
+      limit?: number;
+      offset?: number;
+    }): Promise<{ transactions: WalletTransactionWithUser[]; total: number }> {
+      const limit = params.limit ?? 50;
+      const offset = params.offset ?? 0;
+      const typeCondition = params.type
+        ? eq(walletTransaction.type, params.type)
+        : undefined;
+
+      const rows = await db
+        .select({
+          id: walletTransaction.id,
+          walletId: walletTransaction.walletId,
+          type: walletTransaction.type,
+          amount: walletTransaction.amount,
+          balanceBefore: walletTransaction.balanceBefore,
+          balanceAfter: walletTransaction.balanceAfter,
+          reference: walletTransaction.reference,
+          idempotencyKey: walletTransaction.idempotencyKey,
+          description: walletTransaction.description,
+          metadata: walletTransaction.metadata,
+          createdAt: walletTransaction.createdAt,
+          userName: user.name,
+          userEmail: user.email,
+        })
+        .from(walletTransaction)
+        .innerJoin(wallet, eq(walletTransaction.walletId, wallet.id))
+        .innerJoin(user, eq(wallet.userId, user.id))
+        .where(typeCondition)
+        .orderBy(desc(walletTransaction.createdAt))
+        .limit(limit)
+        .offset(offset);
+
+      const [countRow] = await db
+        .select({ count: sql<string>`count(*)` })
+        .from(walletTransaction)
+        .where(typeCondition);
+
+      return { transactions: rows, total: Number(countRow?.count ?? 0) };
     },
   };
 }

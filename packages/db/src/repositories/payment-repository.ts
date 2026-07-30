@@ -5,11 +5,16 @@
 //          packages/lib/src/payments/verify-and-credit-payment.ts — this
 //          repository just needs to expose the right queries.
 
-import { and, eq, lt } from "drizzle-orm";
+import { and, eq, lt, sql, desc } from "drizzle-orm";
 import type { Database } from "../client";
-import { payment } from "../schema";
+import { payment, user } from "../schema";
 
 export type PaymentRecord = typeof payment.$inferSelect;
+
+export interface PaymentWithUser extends PaymentRecord {
+  userName: string;
+  userEmail: string;
+}
 
 export interface CreatePaymentInput {
   userId: string;
@@ -124,6 +129,53 @@ export function createPaymentRepository(db: Database) {
         .where(and(eq(payment.id, id), eq(payment.status, "initiated")))
         .returning();
       return row ?? null;
+    },
+
+    /** Platform-wide payment feed for Phase 6b's admin monitoring view. */
+    async listAllWithUser(params: {
+      status?: PaymentRecord["status"];
+      limit?: number;
+      offset?: number;
+    }): Promise<{ payments: PaymentWithUser[]; total: number }> {
+      const limit = params.limit ?? 50;
+      const offset = params.offset ?? 0;
+      const statusCondition = params.status
+        ? eq(payment.status, params.status)
+        : undefined;
+
+      const rows = await db
+        .select({
+          id: payment.id,
+          userId: payment.userId,
+          walletId: payment.walletId,
+          provider: payment.provider,
+          status: payment.status,
+          reference: payment.reference,
+          providerTransactionId: payment.providerTransactionId,
+          amountKobo: payment.amountKobo,
+          currency: payment.currency,
+          channel: payment.channel,
+          walletTransactionId: payment.walletTransactionId,
+          paidAt: payment.paidAt,
+          metadata: payment.metadata,
+          createdAt: payment.createdAt,
+          updatedAt: payment.updatedAt,
+          userName: user.name,
+          userEmail: user.email,
+        })
+        .from(payment)
+        .innerJoin(user, eq(payment.userId, user.id))
+        .where(statusCondition)
+        .orderBy(desc(payment.createdAt))
+        .limit(limit)
+        .offset(offset);
+
+      const [countRow] = await db
+        .select({ count: sql<string>`count(*)` })
+        .from(payment)
+        .where(statusCondition);
+
+      return { payments: rows, total: Number(countRow?.count ?? 0) };
     },
   };
 }
