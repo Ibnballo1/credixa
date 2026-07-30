@@ -15,7 +15,7 @@ import {
   InsufficientBalanceError,
   WalletFrozenError,
 } from "@credixa/db";
-import { initiatePurchase } from "@credixa/lib";
+import { initiatePurchase } from "@credixa/lib/jobs";
 import type { CredixaRole } from "@credixa/types";
 import {
   airtimePurchaseSchema,
