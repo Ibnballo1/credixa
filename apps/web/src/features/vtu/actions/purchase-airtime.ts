@@ -11,10 +11,12 @@ import { requireAuth } from "@credixa/auth";
 import {
   db,
   createWalletRepository,
+  resolvePrice,
   InsufficientBalanceError,
   WalletFrozenError,
 } from "@credixa/db";
-import { initiatePurchase } from "@credixa/lib/jobs";
+import { initiatePurchase } from "@credixa/lib";
+import type { CredixaRole } from "@credixa/types";
 import {
   airtimePurchaseSchema,
   type AirtimePurchaseInput,
@@ -28,6 +30,11 @@ export async function purchaseAirtimeAction(
   input: AirtimePurchaseInput & { idempotencyKey: string },
 ): Promise<PurchaseActionResult> {
   const session = await requireAuth();
+  // Same cast pattern as packages/auth/src/guards.ts's requireRole —
+  // Better Auth's admin-plugin type inference doesn't strictly narrow
+  // this to CredixaRole on its own.
+  const role =
+    (session.user.role as CredixaRole | null | undefined) ?? "customer";
 
   const parsed = airtimePurchaseSchema.safeParse(input);
   if (!parsed.success) {
@@ -40,12 +47,21 @@ export async function purchaseAirtimeAction(
   const walletRepository = createWalletRepository(db);
   const wallet = await walletRepository.createForUser(session.user.id);
 
+  // Airtime has no fixed catalog price — resolvePrice applies any
+  // active role-based discount (Phase 6c pricing engine) to the user's
+  // entered amount, or returns it unchanged if no rule applies.
+  const { amountKobo } = await resolvePrice(db, {
+    serviceId: parsed.data.serviceId,
+    role,
+    requestedAmountKobo: parsed.data.amountNaira * 100,
+  });
+
   try {
     const result = await initiatePurchase({
       userId: session.user.id,
       walletId: wallet.id,
       serviceId: parsed.data.serviceId,
-      amountKobo: parsed.data.amountNaira * 100,
+      amountKobo,
       idempotencyKey: input.idempotencyKey,
       recipientPhone: parsed.data.recipientPhone,
     });

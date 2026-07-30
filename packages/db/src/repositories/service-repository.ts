@@ -33,6 +33,38 @@ export function createServiceRepository(db: Database) {
       // call sites read clearly regardless of which shape they expect.
       return this.listByType(type);
     },
+
+    /** Every service, active or not — for the admin catalog view (Phase
+     * 6c). Customer-facing queries use listByType instead. */
+    async listAll(): Promise<ServiceRecord[]> {
+      return db.select().from(service);
+    },
+
+    async setActive(
+      id: string,
+      isActive: boolean,
+    ): Promise<ServiceRecord | null> {
+      const [row] = await db
+        .update(service)
+        .set({ isActive, updatedAt: new Date() })
+        .where(eq(service.id, id))
+        .returning();
+      return row ?? null;
+    },
+
+    /** Sets the fixed catalog price (data/cable plans only — airtime and
+     * electricity have no fixed price by design, see docs/database-schema.md). */
+    async setPrice(
+      id: string,
+      priceKobo: number,
+    ): Promise<ServiceRecord | null> {
+      const [row] = await db
+        .update(service)
+        .set({ priceKobo, updatedAt: new Date() })
+        .where(eq(service.id, id))
+        .returning();
+      return row ?? null;
+    },
   };
 }
 

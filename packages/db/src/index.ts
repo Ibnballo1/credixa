@@ -77,12 +77,12 @@ export type {
   ProviderTransactionRecord,
   LogProviderTransactionInput,
 } from "./repositories/provider-transaction-repository";
-// export { createPricingRuleRepository } from "./repositories/pricing-rule-repository";
-// export type {
-//   PricingRuleRepository,
-//   PricingRuleRecord,
-//   CreatePricingRuleInput,
-// } from "./repositories/pricing-rule-repository";
+export { createPricingRuleRepository } from "./repositories/pricing-rule-repository";
+export type {
+  PricingRuleRepository,
+  PricingRuleRecord,
+  CreatePricingRuleInput,
+} from "./repositories/pricing-rule-repository";
 
-// export * from "./pricing";
+export * from "./pricing";
 export * from "./ledger";
