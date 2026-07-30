@@ -8,10 +8,12 @@ import {
   db,
   createWalletRepository,
   createServiceRepository,
+  resolvePrice,
   InsufficientBalanceError,
   WalletFrozenError,
 } from "@credixa/db";
 import { initiatePurchase } from "@credixa/lib/jobs";
+import type { CredixaRole } from "@credixa/types";
 import {
   dataPurchaseSchema,
   type DataPurchaseInput,
@@ -22,6 +24,8 @@ export async function purchaseDataAction(
   input: DataPurchaseInput & { idempotencyKey: string },
 ): Promise<PurchaseActionResult> {
   const session = await requireAuth();
+  const role =
+    (session.user.role as CredixaRole | null | undefined) ?? "customer";
 
   const parsed = dataPurchaseSchema.safeParse(input);
   if (!parsed.success) {
@@ -44,13 +48,20 @@ export async function purchaseDataAction(
   const walletRepository = createWalletRepository(db);
   const wallet = await walletRepository.createForUser(session.user.id);
 
+  // resolvePrice applies any active role-based override (Phase 6c
+  // pricing engine) on top of the catalog's base price — still never
+  // trusting anything from the client, just resolving server-side.
+  const { amountKobo } = await resolvePrice(db, {
+    serviceId: serviceRow.id,
+    role,
+  });
+
   try {
     const result = await initiatePurchase({
       userId: session.user.id,
       walletId: wallet.id,
       serviceId: serviceRow.id,
-      // Authoritative price from the catalog row — never the client's.
-      amountKobo: serviceRow.priceKobo,
+      amountKobo,
       idempotencyKey: input.idempotencyKey,
       recipientPhone: parsed.data.recipientPhone,
     });

@@ -37,6 +37,37 @@ export function createProviderRepository(db: Database) {
         .where(eq(provider.isActive, true))
         .orderBy(asc(provider.priority));
     },
+
+    /** Every provider, active or not — for the admin service
+     * configuration view (Phase 6c). ProviderRouter uses listActive
+     * instead; this is admin-only. */
+    async listAll(): Promise<ProviderRecord[]> {
+      return db.select().from(provider).orderBy(asc(provider.priority));
+    },
+
+    async setActive(
+      id: string,
+      isActive: boolean,
+    ): Promise<ProviderRecord | null> {
+      const [row] = await db
+        .update(provider)
+        .set({ isActive, updatedAt: new Date() })
+        .where(eq(provider.id, id))
+        .returning();
+      return row ?? null;
+    },
+
+    async setPriority(
+      id: string,
+      priority: number,
+    ): Promise<ProviderRecord | null> {
+      const [row] = await db
+        .update(provider)
+        .set({ priority, updatedAt: new Date() })
+        .where(eq(provider.id, id))
+        .returning();
+      return row ?? null;
+    },
   };
 }
 

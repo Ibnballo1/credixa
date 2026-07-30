@@ -74,3 +74,13 @@ export const vtuPurchaseStatusEnum = pgEnum("credixa_vtu_purchase_status", [
   "success",
   "failed",
 ]);
+
+// Phase 6c: pricing engine (ADR 0010). "flat_price" overrides
+// service.priceKobo outright (data/cable-style fixed plans);
+// "discount_percent" applies a percentage off a variable, user-entered
+// amount (airtime/electricity-style) — see
+// packages/db/src/pricing/resolve-price.ts.
+export const pricingRuleTypeEnum = pgEnum("credixa_pricing_rule_type", [
+  "flat_price",
+  "discount_percent",
+]);

@@ -10,3 +10,4 @@ export * from "./notification";
 export * from "./ledger";
 export * from "./payment";
 export * from "./vtu";
+export * from "./pricing";
