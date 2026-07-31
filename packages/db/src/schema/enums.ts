@@ -84,3 +84,14 @@ export const pricingRuleTypeEnum = pgEnum("credixa_pricing_rule_type", [
   "flat_price",
   "discount_percent",
 ]);
+
+// Phase 7a: agent registration approval workflow. A user's role only
+// becomes "agent" (via Better Auth's admin plugin, same mechanism as
+// Phase 6a's role management) once an admin approves their application
+// — applying alone does not grant agent pricing.
+export const agentStatusEnum = pgEnum("credixa_agent_status", [
+  "pending",
+  "approved",
+  "rejected",
+  "suspended",
+]);

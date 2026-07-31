@@ -2,10 +2,7 @@
  * File: apps/web/src/app/(customer)/layout.tsx
  * Purpose: Authoritative auth boundary + shared shell for EVERY
  *          authenticated customer route (/dashboard, /profile, and any
- *          future customer route). proxy.ts only does an optimistic
- *          cookie check; this layout performs the real, database-backed
- *          session check via requireAuth() before rendering anything
- *          underneath it.
+ *          future customer route).
  */
 import { requireAuth } from "@credixa/auth";
 import { getNotificationSummary } from "@/features/notifications/services/notification-service";
