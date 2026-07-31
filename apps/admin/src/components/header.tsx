@@ -29,6 +29,7 @@ import {
 const NAV_LINKS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Users", href: "/dashboard/users", icon: Users },
+  { label: "Agents", href: "/dashboard/agents", icon: Users },
   { label: "Wallets", href: "/dashboard/wallets", icon: Wallet },
   {
     label: "Transactions",

@@ -83,13 +83,13 @@ export type {
   PricingRuleRecord,
   CreatePricingRuleInput,
 } from "./repositories/pricing-rule-repository";
-// export { createAgentRepository } from "./repositories/agent-repository";
-// export type {
-//   AgentRepository,
-//   AgentRecord,
-//   AgentWithUser,
-//   ApplyForAgentInput,
-// } from "./repositories/agent-repository";
+export { createAgentRepository } from "./repositories/agent-repository";
+export type {
+  AgentRepository,
+  AgentRecord,
+  AgentWithUser,
+  ApplyForAgentInput,
+} from "./repositories/agent-repository";
 
 export * from "./pricing";
 export * from "./analytics";
