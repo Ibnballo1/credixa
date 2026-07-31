@@ -10,6 +10,8 @@ import {
   ArrowLeftRight,
   ShoppingBag,
   CreditCard,
+  Settings,
+  Banknote,
 } from "lucide-react";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import type { Session } from "@credixa/auth";
@@ -35,6 +37,8 @@ const NAV_LINKS = [
   },
   { label: "Purchases", href: "/dashboard/purchases", icon: ShoppingBag },
   { label: "Payments", href: "/dashboard/payments", icon: CreditCard },
+  { label: "Services", href: "/dashboard/services", icon: Settings },
+  { label: "Pricing", href: "/dashboard/pricing", icon: Banknote },
 ];
 
 interface HeaderProps {
