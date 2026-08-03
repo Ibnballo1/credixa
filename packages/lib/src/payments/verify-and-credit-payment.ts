@@ -21,7 +21,7 @@
 import {
   db,
   createPaymentRepository,
-  createReferralRepository,
+  // createReferralRepository,
   creditWallet,
   WalletFrozenError,
 } from "@credixa/db";
