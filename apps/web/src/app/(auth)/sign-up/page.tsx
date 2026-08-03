@@ -10,7 +10,13 @@ export const metadata: Metadata = {
   title: "Create your Credixa account",
 };
 
-export default function SignUpPage() {
+export default async function SignUpPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>;
+}) {
+  const { ref } = await searchParams;
+
   return (
     <div>
       <h1 className="mb-1 text-2xl font-semibold text-slate-900">
@@ -19,7 +25,7 @@ export default function SignUpPage() {
       <p className="mb-6 text-sm text-slate-500">
         Fast, secure payments — set up in under a minute.
       </p>
-      <SignUpForm />
+      <SignUpForm {...(ref !== undefined ? { referralCode: ref } : {})} />
       <p className="mt-6 text-center text-sm text-slate-500">
         Already have an account?{" "}
         <Link

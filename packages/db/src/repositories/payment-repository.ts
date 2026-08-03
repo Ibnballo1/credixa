@@ -5,7 +5,7 @@
 //          packages/lib/src/payments/verify-and-credit-payment.ts — this
 //          repository just needs to expose the right queries.
 
-import { and, eq, lt, sql, desc } from "drizzle-orm";
+import { and, eq, lt, sql, desc, count } from "drizzle-orm";
 import type { Database } from "../client";
 import { payment, user } from "../schema";
 
@@ -67,6 +67,17 @@ export function createPaymentRepository(db: Database) {
         .from(payment)
         .where(eq(payment.userId, userId))
         .limit(limit);
+    },
+
+    /** Used by the Phase 7b referral-qualification hook to detect a
+     * user's first successful funding — count === 1 means "this one is
+     * the first." */
+    async countSuccessfulByUser(userId: string): Promise<number> {
+      const [row] = await db
+        .select({ value: count() })
+        .from(payment)
+        .where(and(eq(payment.userId, userId), eq(payment.status, "success")));
+      return row?.value ?? 0;
     },
 
     /**

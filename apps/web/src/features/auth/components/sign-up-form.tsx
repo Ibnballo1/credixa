@@ -14,7 +14,7 @@ import { Button, Input, Label, FieldError } from "@credixa/ui";
 import { signUpSchema, type SignUpInput } from "../schemas/sign-up-schema";
 import { signUpAction } from "../actions/sign-up";
 
-export function SignUpForm() {
+export function SignUpForm({ referralCode }: { referralCode?: string }) {
   const [formError, setFormError] = useState<string | null>(null);
 
   const {
@@ -24,6 +24,7 @@ export function SignUpForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: { referralCode },
   });
 
   async function onSubmit(data: SignUpInput) {
@@ -60,9 +61,9 @@ export function SignUpForm() {
           hasError={!!errors.name}
           {...register("name")}
         />
-        {errors.name?.message ? (
-          <FieldError message={errors.name.message} />
-        ) : null}
+        <FieldError
+          {...(errors.name?.message ? { message: errors.name.message } : {})}
+        />
       </div>
 
       <div>
@@ -74,9 +75,9 @@ export function SignUpForm() {
           hasError={!!errors.email}
           {...register("email")}
         />
-        {errors.email?.message ? (
-          <FieldError message={errors.email.message} />
-        ) : null}
+        <FieldError
+          {...(errors.email?.message ? { message: errors.email.message } : {})}
+        />
       </div>
 
       <div>
@@ -89,9 +90,9 @@ export function SignUpForm() {
           hasError={!!errors.phone}
           {...register("phone")}
         />
-        {errors.phone?.message ? (
-          <FieldError message={errors.phone.message} />
-        ) : null}
+        <FieldError
+          {...(errors.phone?.message ? { message: errors.phone.message } : {})}
+        />
       </div>
 
       <div>
@@ -103,9 +104,11 @@ export function SignUpForm() {
           hasError={!!errors.password}
           {...register("password")}
         />
-        {errors.password?.message ? (
-          <FieldError message={errors.password.message} />
-        ) : null}
+        <FieldError
+          {...(errors.password?.message
+            ? { message: errors.password.message }
+            : {})}
+        />
       </div>
 
       <div>
@@ -117,14 +120,35 @@ export function SignUpForm() {
           hasError={!!errors.confirmPassword}
           {...register("confirmPassword")}
         />
-        {errors.confirmPassword?.message ? (
-          <FieldError message={errors.confirmPassword.message} />
+        <FieldError
+          {...(errors.confirmPassword?.message
+            ? { message: errors.confirmPassword.message }
+            : {})}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="referralCode">Referral code (optional)</Label>
+        <Input
+          id="referralCode"
+          hasError={!!errors.referralCode}
+          {...register("referralCode")}
+        />
+        {referralCode ? (
+          <p className="mt-1 text-xs text-primary">
+            Applied from your invite link.
+          </p>
         ) : null}
+        <FieldError
+          {...(errors.referralCode?.message
+            ? { message: errors.referralCode.message }
+            : {})}
+        />
       </div>
 
       <Button
         type="submit"
-        className="h-11 text-white w-full"
+        className="w-full"
         size="lg"
         isLoading={isSubmitting}
       >

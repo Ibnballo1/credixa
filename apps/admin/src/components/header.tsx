@@ -12,6 +12,7 @@ import {
   CreditCard,
   Settings,
   Banknote,
+  Users2,
 } from "lucide-react";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import type { Session } from "@credixa/auth";
@@ -30,6 +31,9 @@ const NAV_LINKS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Users", href: "/dashboard/users", icon: Users },
   { label: "Agents", href: "/dashboard/agents", icon: Users },
+  { label: "Referrals", href: "/dashboard/referrals", icon: Users2 },
+  { label: "Commissions", href: "/dashboard/commissions", icon: Banknote },
+
   { label: "Wallets", href: "/dashboard/wallets", icon: Wallet },
   {
     label: "Transactions",
