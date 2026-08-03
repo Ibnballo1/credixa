@@ -150,7 +150,7 @@ export async function verifyAndCreditPayment(
     if (
       (await paymentRepository.countSuccessfulByUser(paymentRow.userId)) === 1
     ) {
-      const referralRepository = createReferralRepository(db);
+      // const referralRepository = createReferralRepository(db);
       // const qualified = await referralRepository.qualifyIfPending(
       //   paymentRow.userId,
       // );
