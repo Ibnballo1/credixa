@@ -95,3 +95,31 @@ export const agentStatusEnum = pgEnum("credixa_agent_status", [
   "rejected",
   "suspended",
 ]);
+
+// Phase 7b: referrals. "qualified" means the referred user completed a
+// qualifying action (their first successful wallet funding) — signing up
+// alone does not qualify a referral, to avoid rewarding referrals for
+// accounts that never actually transact. See
+// packages/lib/src/payments/verify-and-credit-payment.ts for where
+// qualification is detected.
+export const referralStatusEnum = pgEnum("credixa_referral_status", [
+  "pending",
+  "qualified",
+]);
+
+// Phase 7c: commission engine. Two distinct triggers:
+//   "referral" — a flat one-time bonus when a referral qualifies (7b).
+//   "agent_margin" — a percentage cashback on an agent's OWN successful
+//     VTU purchases, on top of their already-discounted pricing_rule
+//     price. See docs/decisions/0015-commission-engine-design.md for
+//     why these are the two types and why rates are constants for now.
+export const commissionTypeEnum = pgEnum("credixa_commission_type", [
+  "referral",
+  "agent_margin",
+]);
+
+export const commissionStatusEnum = pgEnum("credixa_commission_status", [
+  "pending",
+  "paid",
+  "failed",
+]);

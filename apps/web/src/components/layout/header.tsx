@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useTransition } from "react";
-import { LogOut, User, UserCheck, ShieldCheck } from "lucide-react";
+import {
+  LogOut,
+  User,
+  UserCheck,
+  ShieldCheck,
+  Banknote,
+  Users,
+} from "lucide-react";
 import { Button, Logo } from "@credixa/ui";
 import { signOutAction } from "@/features/auth/actions/sign-out";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
@@ -60,6 +67,18 @@ export function Header({ session, notificationSummary }: HeaderProps) {
           >
             Profile
           </Link>
+          <Link
+            href="/dashboard/referrals"
+            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            Referrals
+          </Link>
+          <Link
+            href="/dashboard/earnings"
+            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            Earnings
+          </Link>
 
           {/* Role Status: Agent Badge vs Become Agent Link */}
           {role === "agent" ? (
@@ -115,6 +134,16 @@ export function Header({ session, notificationSummary }: HeaderProps) {
               <DropdownMenuItem asChild>
                 <Link href="/profile" className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" /> Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/referrals" className="cursor-pointer">
+                  <Users className="mr-2 h-4 w-4" /> Referrals
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/earnings" className="cursor-pointer">
+                  <Banknote className="mr-2 h-4 w-4" /> Earnings
                 </Link>
               </DropdownMenuItem>
 

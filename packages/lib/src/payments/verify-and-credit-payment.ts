@@ -21,10 +21,12 @@
 import {
   db,
   createPaymentRepository,
+  createReferralRepository,
   creditWallet,
   WalletFrozenError,
 } from "@credixa/db";
 import { verifyTransaction } from "./paystack-client";
+// import { awardReferralCommission } from "../commissions/commission-service";
 
 export type VerifyAndCreditStatus =
   | "success"
@@ -137,6 +139,33 @@ export async function verifyAndCreditPayment(
     // idempotency key), so no double credit occurred — this is just a
     // benign race over which caller's metadata update "wins."
     return { status: "already_processed", paymentId: paymentRow.id };
+  }
+
+  // Phase 7b: qualify a pending referral on this user's FIRST successful
+  // funding — not on signup alone, so a referral only "counts" once the
+  // referred user actually transacts. Best-effort: a failure here must
+  // never fail the funding itself, since the money has already been
+  // credited by this point.
+  try {
+    if (
+      (await paymentRepository.countSuccessfulByUser(paymentRow.userId)) === 1
+    ) {
+      const referralRepository = createReferralRepository(db);
+      const qualified = await referralRepository.qualifyIfPending(
+        paymentRow.userId,
+      );
+      // Phase 7c: award the referrer's commission the moment (and only
+      // the moment) qualification actually happened here — not on every
+      // funding, and not if the referral was already qualified by a
+      // concurrent caller (qualifyIfPending returns null in that case).
+      // if (qualified) {
+      //   await awardReferralCommission(qualified.id);
+      // }
+    }
+  } catch {
+    // Swallow — referral qualification/commissioning is a growth-tracking
+    // side effect, not part of the financial guarantee this function
+    // exists to make for the funding itself.
   }
 
   return { status: "success", paymentId: paymentRow.id };

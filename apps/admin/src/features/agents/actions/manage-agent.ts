@@ -32,16 +32,30 @@ export async function approveAgentAction(
     return { success: false, error: "Application not found or not pending." };
   }
 
-  try {
-    await auth.api.setRole({
-      body: { userId: updated.userId, role: "agent" },
-      headers: await headers(),
-    });
-  } catch {
-    return {
-      success: false,
-      error: "Approved the application but failed to grant agent role.",
-    };
+  // 1. Fetch user to verify their current role
+  const targetUser = await db.query.user.findFirst({
+    where: (users, { eq }) => eq(users.id, updated.userId),
+  });
+
+  // 2. Protect Admin accounts from being downgraded to 'agent'
+  if (targetUser?.role === "admin") {
+    // Keep application marked as approved in agent table, but don't overwrite user.role
+    console.warn(
+      `User ${updated.userId} is an Admin. Skipping setRole('agent').`,
+    );
+  } else {
+    // 3. Update role only for standard non-admin users
+    try {
+      await auth.api.setRole({
+        body: { userId: updated.userId, role: "agent" },
+        headers: await headers(),
+      });
+    } catch {
+      return {
+        success: false,
+        error: "Approved the application but failed to grant agent role.",
+      };
+    }
   }
 
   const auditLogRepository = createAuditLogRepository(db);

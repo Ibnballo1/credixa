@@ -1,10 +1,9 @@
 /**
  * File: apps/web/src/app/(customer)/dashboard/become-agent/page.tsx
- * Purpose: "Become an agent" — shows the application form, or the
- *          current application's status if one already exists.
  */
 import type { Metadata } from "next";
 import { requireAuth } from "@credixa/auth";
+import type { CredixaRole } from "@credixa/types";
 import { getMyAgentStatus } from "@/features/agents/services/agent-service";
 import { ApplyAgentForm } from "@/features/agents/components/apply-agent-form";
 
@@ -15,6 +14,11 @@ export const metadata: Metadata = {
 export default async function BecomeAgentPage() {
   const session = await requireAuth();
   const agentStatus = await getMyAgentStatus(session.user.id);
+  const userRole = (session.user.role as CredixaRole | null) ?? "customer";
+
+  // Check if they are actually active as an agent in user.role
+  const isApprovedAgent =
+    userRole === "agent" && agentStatus?.status === "approved";
 
   return (
     <div className="mx-auto max-w-md">
@@ -27,7 +31,11 @@ export default async function BecomeAgentPage() {
       </p>
 
       <div className="rounded-xl border border-slate-200 bg-white p-6">
-        {!agentStatus || agentStatus.status === "rejected" ? (
+        {!agentStatus ||
+        agentStatus.status === "rejected" ||
+        (!isApprovedAgent &&
+          agentStatus.status !== "pending" &&
+          agentStatus.status !== "suspended") ? (
           <>
             {agentStatus?.status === "rejected" ? (
               <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -50,7 +58,7 @@ export default async function BecomeAgentPage() {
               We&apos;ll notify you once it&apos;s reviewed.
             </p>
           </div>
-        ) : agentStatus.status === "approved" ? (
+        ) : isApprovedAgent ? (
           <div className="text-center">
             <p className="text-sm font-medium text-primary">
               You&apos;re an approved agent
