@@ -13,4 +13,4 @@ export * from "./vtu";
 export * from "./pricing";
 export * from "./agent";
 export * from "./referral";
-// export * from "./commission";
+export * from "./commission";

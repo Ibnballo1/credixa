@@ -30,6 +30,7 @@ import {
 } from "../providers/provider-router";
 import { redactRequestForLogging } from "../providers/types";
 import type { PurchaseOutcome } from "../providers/types";
+import { awardAgentMarginCommission } from "../commissions/commission-service";
 
 export interface InitiatePurchaseInput {
   userId: string;
@@ -276,6 +277,16 @@ async function resolveOutcome(input: {
       providerReference: input.finalOutcome.providerReference,
       walletTransactionId: finalized.transaction.id,
     });
+
+    // Phase 7c: agent margin commission — a no-op for non-agents
+    // (awardAgentMarginCommission checks the purchaser's role itself).
+    // Best-effort: must never affect the purchase result, which has
+    // already succeeded by this point.
+    try {
+      await awardAgentMarginCommission(input.purchaseId);
+    } catch {
+      // Swallow — see comment above.
+    }
 
     return { status: "success", purchaseId: input.purchaseId };
   }
