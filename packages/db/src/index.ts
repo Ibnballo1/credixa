@@ -104,13 +104,13 @@ export type {
   ReferralWithBothUsers,
   CreateReferralInput,
 } from "./repositories/referral-repository";
-// export { createCommissionRepository } from "./repositories/commission-repository";
-// export type {
-//   CommissionRepository,
-//   CommissionRecord,
-//   CommissionWithUser,
-//   CreateCommissionInput,
-// } from "./repositories/commission-repository";
+export { createCommissionRepository } from "./repositories/commission-repository";
+export type {
+  CommissionRepository,
+  CommissionRecord,
+  CommissionWithUser,
+  CreateCommissionInput,
+} from "./repositories/commission-repository";
 
 export * from "./pricing";
 export * from "./analytics";

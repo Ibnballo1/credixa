@@ -21,12 +21,12 @@
 import {
   db,
   createPaymentRepository,
-  // createReferralRepository,
+  createReferralRepository,
   creditWallet,
   WalletFrozenError,
 } from "@credixa/db";
 import { verifyTransaction } from "./paystack-client";
-// import { awardReferralCommission } from "../commissions/commission-service";
+import { awardReferralCommission } from "../commissions/commission-service";
 
 export type VerifyAndCreditStatus =
   | "success"
@@ -150,17 +150,17 @@ export async function verifyAndCreditPayment(
     if (
       (await paymentRepository.countSuccessfulByUser(paymentRow.userId)) === 1
     ) {
-      // const referralRepository = createReferralRepository(db);
-      // const qualified = await referralRepository.qualifyIfPending(
-      //   paymentRow.userId,
-      // );
+      const referralRepository = createReferralRepository(db);
+      const qualified = await referralRepository.qualifyIfPending(
+        paymentRow.userId,
+      );
       // Phase 7c: award the referrer's commission the moment (and only
       // the moment) qualification actually happened here — not on every
       // funding, and not if the referral was already qualified by a
       // concurrent caller (qualifyIfPending returns null in that case).
-      // if (qualified) {
-      //   await awardReferralCommission(qualified.id);
-      // }
+      if (qualified) {
+        await awardReferralCommission(qualified.id);
+      }
     }
   } catch {
     // Swallow — referral qualification/commissioning is a growth-tracking
