@@ -14,7 +14,10 @@ export {
 
 export { verifyPaystackWebhookSignature } from "../payments/verify-webhook-signature";
 export { verifyAndCreditPayment } from "../payments/verify-and-credit-payment";
-export type { AwardCommissionResult } from "../commissions/commission-service";
+export {
+  awardReferralCommission,
+  awardAgentMarginCommission,
+} from "../commissions/commission-service";
 
 // VTU Services & Provider Routing
 export {

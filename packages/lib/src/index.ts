@@ -24,10 +24,7 @@ export type {
   PurchaseResult,
   PurchaseResultStatus,
 } from "./vtu/purchase-service";
-export {
-  awardReferralCommission,
-  awardAgentMarginCommission,
-} from "./commissions/commission-service";
+export type { AwardCommissionResult } from "./commissions/commission-service";
 
 // Types - Paystack & Payments
 export type {
