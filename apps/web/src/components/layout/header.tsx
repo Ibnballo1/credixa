@@ -57,7 +57,7 @@ export function Header({ session, notificationSummary }: HeaderProps) {
         <nav className="flex items-center gap-2 md:gap-5">
           <Link
             href="/dashboard"
-            className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+            className="hidden md:block text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
           >
             Dashboard
           </Link>
@@ -69,13 +69,13 @@ export function Header({ session, notificationSummary }: HeaderProps) {
           </Link>
           <Link
             href="/dashboard/referrals"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="hidden md:block text-sm font-medium text-slate-600 hover:text-slate-900"
           >
             Referrals
           </Link>
           <Link
             href="/dashboard/earnings"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="hidden md:block text-sm font-medium text-slate-600 hover:text-slate-900"
           >
             Earnings
           </Link>
