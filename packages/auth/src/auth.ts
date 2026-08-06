@@ -17,7 +17,9 @@ export const auth = betterAuth({
   advanced: {
     // Allows cookie sharing across subdomains/ports on localhost
     crossSubDomainCookies: {
-      enabled: true,
+      // enabled: true,
+      enabled: process.env.NODE_ENV === "production",
+      // domain: ".yourcustomdomain.com", // Only needed if using custom domain + subdomains
     },
   },
 
